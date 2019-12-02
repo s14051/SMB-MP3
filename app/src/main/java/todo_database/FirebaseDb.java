@@ -3,6 +3,8 @@ package todo_database;
 import android.util.Log;
 
 import com.example.todo.ListActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,11 +13,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseDb {
     private FirebaseDatabase _db;
+    private FirebaseUser user;
     private DatabaseReference databaseReference;
 
     public FirebaseDb() {
         _db = FirebaseDatabase.getInstance();
-        databaseReference = _db.getReference("products");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        databaseReference = _db.getReference("users").child(user.getUid()).child("products");
     }
 
     public void addProduct(Product newProduct) {
