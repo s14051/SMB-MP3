@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_shops_add"
+        android:icon="@drawable/ic_add_location_black_24dp"
+        android:title="@string/title_shops_add" />
+    <item
         android:id="@+id/navigation_shops_list"
         android:icon="@drawable/ic_shopping_basket_black_24dp"
         android:title="@string/title_shops_list" />

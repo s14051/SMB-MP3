@@ -25,7 +25,8 @@ class ShopsListFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_shops_list, container, false)
 
         val shopsList = listOf(
-                Shop("x-kom", "Polecam Maciej Sadoś", 2.0, "1234 1234 454545")
+                Shop("x-kom", "Polecam Maciej Sadoś", 2.0, "1234 1234 454545"),
+                Shop("Morele.net", "Dobry sklep", 5.0, "334234 232.0902")
         )
 
         viewManager = LinearLayoutManager(root.context)
