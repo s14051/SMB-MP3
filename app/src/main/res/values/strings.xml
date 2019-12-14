@@ -1,12 +1,11 @@
 <resources>
-    <string name="app_name">Todo</string>
+    <string name="app_name">Lista zakupów</string>
     <string name="rozmiar_czcionki">Rozmiar czcionki</string>
     <string name="rozmiar">Rozmiar</string>
     <string name="zapisz">Zapisz</string>
     <string name="opcje">Opcje</string>
     <string name="kolor_czcionki">Kolor czcionki</string>
     <string name="lista">Lista</string>
-    <string name="todo_smb">TODO SMB</string>
     <string name="preferences_font_size_key">fontSize</string>
     <string name="preferences_font_color_key">fontColor</string>
     <string name="preferences_default_font_color_key">000000</string>
@@ -20,4 +19,8 @@
     <string name="edit">Edytuj</string>
     <string name="delete">Usuń</string>
     <string name="logout">Logout</string>
+    <string name="title_shops_list">Zapisane sklepy</string>
+    <string name="title_shops_add">Dodaj</string>
+    <string name="title_shops_map">Mapa</string>
+    <string name="sklepy">Sklepy</string>
 </resources>

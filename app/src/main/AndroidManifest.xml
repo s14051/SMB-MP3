@@ -12,6 +12,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".ShopsActivity"
+            android:label="@string/title_shops_list"></activity>
+        <activity
             android:name=".ListActivity"
             android:parentActivityName=".MainActivity" />
         <activity

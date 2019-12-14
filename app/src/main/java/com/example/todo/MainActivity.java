@@ -114,6 +114,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(list);
     }
 
+    public void goToShopsList(View view) {
+        Intent shopsIntent = new Intent(this, ShopsActivity.class);
+        startActivity(shopsIntent);
+    }
+
     public void goToPreferences(View view) {
         Intent preferences = new Intent(this, PreferencesActivity.class);
         startActivity(preferences);

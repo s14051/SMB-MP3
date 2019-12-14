@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_shops_list">
+
+    <fragment
+        android:id="@+id/navigation_shops_list"
+        android:name="com.example.todo.ui.shopsList.ShopsListFragment"
+        android:label="@string/title_shops_list" />
+
+    <fragment
+        android:id="@+id/navigation_shops_map"
+        android:name="com.example.todo.ui.shopsMap.ShopsMapFragment"
+        android:label="@string/title_shops_map" />
+
+</navigation>
