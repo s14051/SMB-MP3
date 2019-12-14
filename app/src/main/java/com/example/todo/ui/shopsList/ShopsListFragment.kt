@@ -12,7 +12,7 @@ import todo_database.FirebaseShopDb
 import todo_database.Shop
 
 class ShopsListFragment : Fragment() {
-
+    private var isFirstRender: Boolean = true
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -24,12 +24,6 @@ class ShopsListFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_shops_list, container, false)
-
-        val shopsList = listOf(
-                Shop(null, "x-kom", "Polecam Maciej Sadoś", 2.0, "1234 1234 454545"),
-                Shop(null, "Morele.net", "Dobry sklep", 5.0, "334234 232.0902")
-        )
-
         viewManager = LinearLayoutManager(root.context)
         viewAdapter = ShopsListAdapter(shopsList)
 
@@ -39,7 +33,10 @@ class ShopsListFragment : Fragment() {
             adapter = viewAdapter
         }
 
-        initShopsList()
+        if (isFirstRender) {
+            initShopsList()
+            isFirstRender = false
+        }
 
         return root
     }

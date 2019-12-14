@@ -16,8 +16,6 @@ class ShopsMapFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_shops_map, container, false)
-        val textView: TextView = root.findViewById(R.id.text_shops_map)
-        textView.text = "Mapa"
 
         return root
     }

@@ -22,12 +22,12 @@ class ShopsAddFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val fragment = inflater.inflate(R.layout.fragment_shops_add, container, false)
-        val saveButton: Button = fragment.findViewById(R.id.shopAddSaveButton)
+        val root = inflater.inflate(R.layout.fragment_shops_add, container, false)
+        val saveButton: Button = root.findViewById(R.id.shopAddSaveButton)
 
         saveButton.setOnClickListener{ onAddButtonClick() }
 
-        return fragment
+        return root
     }
 
     private fun onAddButtonClick() {

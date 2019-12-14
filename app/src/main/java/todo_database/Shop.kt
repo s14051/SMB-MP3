@@ -5,4 +5,6 @@ class Shop(
         var name: String,
         var description: String,
         var radius: Double,
-        var coordinates: String)
+        var coordinates: String) {
+    constructor() : this(null, "", "", -1.0, "")
+}
