@@ -1,7 +1,8 @@
 package todo_database
 
 class Shop(
-        val name: String,
-        val description: String,
-        val radius: Double,
-        val coordinates: String)
+        var id: String?,
+        var name: String,
+        var description: String,
+        var radius: Double,
+        var coordinates: String)

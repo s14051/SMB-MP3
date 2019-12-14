@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_shops_add"
+    android:background="#FFF"
     android:padding="20dp">
 
     <EditText
@@ -24,13 +26,14 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:text="43.09009, -23.7547"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/shopAddCoordinatesTextView2"
+        app:layout_constraintStart_toEndOf="@+id/shopAddCoordinatesLabelTextView"
         app:layout_constraintTop_toBottomOf="@+id/shopAddRadiusEditText" />
 
     <TextView
-        android:id="@+id/shopAddCoordinatesTextView2"
+        android:id="@+id/shopAddCoordinatesLabelTextView"
         android:layout_width="96dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

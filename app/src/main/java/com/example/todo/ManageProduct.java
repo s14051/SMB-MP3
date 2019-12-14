@@ -10,16 +10,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import todo_database.FirebaseDb;
+import todo_database.FirebaseProductDb;
 import todo_database.Product;
 
 public final class ManageProduct {
     private Context context;
-    private FirebaseDb db;
+    private FirebaseProductDb db;
 
     public ManageProduct(Context context) {
         this.context = context;
-        this.db = new FirebaseDb();
+        this.db = new FirebaseProductDb();
     }
 
     public void showAddProductDialog() {

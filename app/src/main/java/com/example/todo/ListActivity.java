@@ -1,24 +1,16 @@
 package com.example.todo;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Method;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
-import todo_database.FirebaseDb;
+import todo_database.FirebaseProductDb;
 import todo_database.Product;
 
 public class ListActivity extends AppCompatActivity {
@@ -86,7 +78,7 @@ public class ListActivity extends AppCompatActivity {
             }
         };
 
-        FirebaseDb db = new FirebaseDb();
+        FirebaseProductDb db = new FirebaseProductDb();
         db.initProducts(i);
     }
 

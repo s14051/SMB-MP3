@@ -11,12 +11,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class FirebaseDb {
+public class FirebaseProductDb {
     private FirebaseDatabase _db;
     private FirebaseUser user;
     private DatabaseReference databaseReference;
 
-    public FirebaseDb() {
+    public FirebaseProductDb() {
         _db = FirebaseDatabase.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = _db.getReference("users").child(user.getUid()).child("products");

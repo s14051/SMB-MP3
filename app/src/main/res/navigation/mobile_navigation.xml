@@ -6,6 +6,11 @@
     app:startDestination="@+id/navigation_shops_list">
 
     <fragment
+        android:id="@+id/navigation_shops_add"
+        android:name="com.example.todo.ui.shopsAdd.ShopsAddFragment"
+        android:label="@string/title_shops_add" />
+
+    <fragment
         android:id="@+id/navigation_shops_list"
         android:name="com.example.todo.ui.shopsList.ShopsListFragment"
         android:label="@string/title_shops_list" />
