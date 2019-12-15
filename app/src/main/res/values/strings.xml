@@ -23,4 +23,7 @@
     <string name="title_shops_add">Dodaj</string>
     <string name="title_shops_map">Mapa</string>
     <string name="sklepy">Sklepy</string>
+    <string name="channel_name">ShopsNotificationChannel</string>
+    <string name="channel_description">Shops notification channel</string>
+    <string name="intent_extra_geofence_shop_name">Shop.name</string>
 </resources>

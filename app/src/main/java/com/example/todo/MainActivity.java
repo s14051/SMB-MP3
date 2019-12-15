@@ -2,21 +2,32 @@ package com.example.todo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.SettingInjectorService;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.todo.ui.shopsList.ShopsListPermissionsChecker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int LOCALIZATION_SETTING_REQUEST = 1;
     private FirebaseAuth fa;
 
     @Override
@@ -114,11 +125,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(list);
     }
 
-    public void goToShopsList(View view) {
-        Intent shopsIntent = new Intent(this, ShopsActivity.class);
-        startActivity(shopsIntent);
-    }
-
     public void goToPreferences(View view) {
         Intent preferences = new Intent(this, PreferencesActivity.class);
         startActivity(preferences);
@@ -127,5 +133,115 @@ public class MainActivity extends AppCompatActivity {
     public void logout(View view) {
         fa.signOut();
         openCredentialsWindow();
+    }
+
+
+    // shops
+    public void goToShopsList(View view) {
+        if (isGpsEnabled()) {
+            requestPermissionsAndRunShopsListActivity();
+        }
+        else {
+            new AlertDialog.Builder(this)
+                    .setTitle("Uprawnienia aplikacji")
+                    .setMessage("Ta funkcjonalność wymaga włączenia lokalizacji. Czy chcesz aktywować lokalizację?")
+                    .setPositiveButton("Włącz lokalizację", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            requireGps();
+                        }
+                    })
+                    .setNegativeButton("Nie, dziękuję", null)
+                    .show();
+        }
+    }
+
+    private void requireGps() {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivityForResult(intent, LOCALIZATION_SETTING_REQUEST);
+    }
+
+    private boolean isGpsEnabled() {
+        LocationManager service = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        if (service != null) {
+            return service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }
+        return false;
+    }
+
+    private void requestPermissionsAndRunShopsListActivity() {
+        ShopsListPermissionsChecker permissionsChecker = new ShopsListPermissionsChecker();
+        permissionsChecker.checkPermissions(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        final int shopsPermissionsRequestCode = getResources().getInteger(R.integer.shop_permissions_request_code);
+        if (requestCode == shopsPermissionsRequestCode) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissions granted
+                runShopsListActivity();
+            } else {
+                Boolean shouldShowRationale = false;
+
+                // Permissions deny - show rationale
+                for (String permission: permissions) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                        shouldShowRationale = true;
+                        break;
+                    }
+                }
+
+                if (shouldShowRationale) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Uprawnienia aplikacji")
+                                .setMessage("Te uprawnienia są wymagane do działania listy sklepów. Jeśli chcesz korzystać z jej funkcjonalności, przyznaj uprawnienia do lokalizacji")
+                                .setPositiveButton("Spróbuj ponownie", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        requestPermissionsAndRunShopsListActivity();
+                                    }
+                                })
+                                .setNegativeButton("Nie, dziękuję", null)
+                                .show();
+                }
+            }
+        }
+        // other 'if' lines to check for other
+        // permissions this app might request.
+    }
+
+    private void runShopsListActivity() {
+        Intent shopsIntent = new Intent(this, ShopsActivity.class);
+        startActivity(shopsIntent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case LOCALIZATION_SETTING_REQUEST:
+                if (isGpsEnabled()) {
+                    requestPermissionsAndRunShopsListActivity();
+                }
+                else {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Uprawnienia aplikacji")
+                            .setMessage("Włącznie lokalizacji jest wymagane do działania tej funkcji.")
+                            .setPositiveButton("Spróbuj ponownie", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requireGps();
+                                }
+                            })
+                            .setNegativeButton("Nie, dziękuję", null)
+                            .show();
+                }
+
+                break;
+
+        }
     }
 }
