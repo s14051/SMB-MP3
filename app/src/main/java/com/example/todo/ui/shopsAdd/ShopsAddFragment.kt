@@ -3,6 +3,7 @@ package com.example.todo.ui.shopsAdd
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -23,19 +24,20 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.fragment_shops_add.*
 import todo_database.FirebaseShopDb
 import todo_database.Shop
+import java.util.*
 
 class ShopsAddFragment : Fragment() {
 
     private var geofencePendingIntent: PendingIntent? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var geocoder: Geocoder
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_shops_add, container, false)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
-
         configureLocationSettings()
 
         // prepare save button
@@ -46,6 +48,9 @@ class ShopsAddFragment : Fragment() {
     }
 
     private fun configureLocationSettings() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+        geocoder = Geocoder(context, Locale.getDefault())
+
         fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
                     if (location != null) {
@@ -66,9 +71,26 @@ class ShopsAddFragment : Fragment() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult ?: return
             for (location in locationResult.locations){
+                //displayPlaceName(location)
                 displayCoordinates(location)
             }
         }
+    }
+
+    private fun displayPlaceName(location: Location) {
+        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        if  (addresses != null){
+            val address = addresses[0]
+            if (address != null) {
+                //Log.i("current address", address.toString())
+                var hint = address.getAddressLine(0)
+                if (address.thoroughfare != null) {
+                    hint = address.thoroughfare
+                }
+                shopAddNameEditText?.hint = hint
+            }
+        }
+
     }
 
     private fun displayCoordinates(location: Location) {

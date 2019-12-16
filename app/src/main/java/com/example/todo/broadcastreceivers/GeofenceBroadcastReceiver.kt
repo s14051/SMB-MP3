@@ -15,6 +15,7 @@ import com.google.android.gms.location.GeofencingEvent
 
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
+    var id = 0
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
@@ -65,7 +66,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {
-            notify(1, builder.build())
+            notify(id++, builder.build())
         }
     }
 }
