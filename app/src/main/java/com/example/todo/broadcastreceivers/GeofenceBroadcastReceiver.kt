@@ -29,16 +29,16 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
         if (isTransitionEnter(geofenceTransition) || isTransitionExit(geofenceTransition)) {
             val shopName = intent!!.getStringExtra(context?.getString(R.string.intent_extra_geofence_shop_name))
-            var notificationTitle = "Witaj w sklepie $shopName!"
+            var notificationTitle = "Witaj w sklepie"// $shopName!"
             var notificationText = "Miło Cię znowu widzieć."
 
             if (isTransitionExit(geofenceTransition)){
-                notificationTitle = "Dziękujemy, że wpadłeś do $shopName"
+                notificationTitle = "Dziękujemy, że wpadłeś"// do $shopName"
                 notificationText = "Do zobaczenia!"
             }
 
             sendNotification(notificationTitle, notificationText, context!!)
-            Log.i("GeofenceBR_notif_sent", "Wysłano notyfikację z (Shop)GeofenceBroadcastReceivera dla: " + shopName)
+            Log.i("GeofenceBR_notif_sent", "Wysłano notyfikację z (Shop)GeofenceBroadcastReceivera")// dla: " + shopName)
         } else {
             // Log the error.
             Log.e("GeofenceBR_error_trans", "Nieprawidłowy transition type")
