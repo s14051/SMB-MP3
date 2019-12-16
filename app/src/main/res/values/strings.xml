@@ -26,4 +26,5 @@
     <string name="channel_name">ShopsNotificationChannel</string>
     <string name="channel_description">Shops notification channel</string>
     <string name="intent_extra_geofence_shop_name">Shop.name</string>
+    <string name="title_activity_shops_map">Map</string>
 </resources>

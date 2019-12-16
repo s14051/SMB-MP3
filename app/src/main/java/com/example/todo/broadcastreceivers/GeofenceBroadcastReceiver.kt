@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.location.LocationManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -27,28 +26,39 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
         val geofenceTransition = geofencingEvent.geofenceTransition
 
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            val triggeringGeofences = geofencingEvent.triggeringGeofences
-            val name = intent!!.getStringExtra(context?.getString(R.string.intent_extra_geofence_shop_name))
+        if (isTransitionEnter(geofenceTransition) || isTransitionExit(geofenceTransition)) {
+            val shopName = intent!!.getStringExtra(context?.getString(R.string.intent_extra_geofence_shop_name))
+            var notificationTitle = "Witaj w sklepie $shopName!"
+            var notificationText = "Miło Cię znowu widzieć."
 
-            sendNotification(name, context!!)
-            Log.i("GeofenceBR_notif_sent", "Wysłano notyfikację z (Shop)GeofenceBroadcastReceivera dla: " + name)
+            if (isTransitionExit(geofenceTransition)){
+                notificationTitle = "Dziękujemy, że wpadłeś do $shopName"
+                notificationText = "Do zobaczenia!"
+            }
+
+            sendNotification(notificationTitle, notificationText, context!!)
+            Log.i("GeofenceBR_notif_sent", "Wysłano notyfikację z (Shop)GeofenceBroadcastReceivera dla: " + shopName)
         } else {
             // Log the error.
             Log.e("GeofenceBR_error_trans", "Nieprawidłowy transition type")
         }
     }
 
-    private fun sendNotification(name: String, context: Context) {
-        val natificationTitle = "Witaj w sklepie $name!"
-        val notificationText = "Miło Cię znowu widzieć."
+    private fun isTransitionEnter(geofenceTransition: Int) : Boolean {
+        return geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER
+    }
 
+    private fun isTransitionExit(geofenceTransition: Int) : Boolean {
+        return geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT
+    }
+
+    private fun sendNotification(notificationTitle: String, notificationText: String, context: Context) {
         val goToMapIntent = Intent(context, ShopsMapFragment::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, goToMapIntent, 0)
 
         var builder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_place_black_24dp)
-                .setContentTitle(natificationTitle)
+                .setContentTitle(notificationTitle)
                 .setContentText(notificationText)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)

@@ -3,7 +3,9 @@ package com.example.todo.ui.shopsAdd
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,30 +18,64 @@ import androidx.fragment.app.Fragment
 import com.example.todo.R
 import com.example.todo.ShopsActivity
 import com.example.todo.broadcastreceivers.GeofenceBroadcastReceiver
-import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofencingClient
-import com.google.android.gms.location.GeofencingRequest
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.android.synthetic.main.fragment_shops_add.*
 import todo_database.FirebaseShopDb
 import todo_database.Shop
 
 class ShopsAddFragment : Fragment() {
 
     private var geofencePendingIntent: PendingIntent? = null
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_shops_add, container, false)
-        val saveButton: Button = root.findViewById(R.id.shopAddSaveButton)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
 
+        configureLocationSettings()
+
+        // prepare save button
+        val saveButton: Button = root.findViewById(R.id.shopAddSaveButton)
         saveButton.setOnClickListener{ onAddButtonClick() }
 
         return root
     }
+
+    private fun configureLocationSettings() {
+        fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        displayCoordinates(location)
+                    }
+                }
+
+        (activity as ShopsActivity).checkGpsSettingsAndRequestLocationUpdates(::requestLocationUpdates)
+    }
+
+    private fun requestLocationUpdates(locationRequest: LocationRequest) {
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper())
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            locationResult ?: return
+            for (location in locationResult.locations){
+                displayCoordinates(location)
+            }
+        }
+    }
+
+    private fun displayCoordinates(location: Location) {
+        val latLngString = "${location.latitude}, ${location.longitude}"
+        shopAddCoordinatesTextView?.text = latLngString
+    }
+
 
     private fun onAddButtonClick() {
         val shopsActivity: ShopsActivity = activity as ShopsActivity
@@ -82,7 +118,7 @@ class ShopsAddFragment : Fragment() {
     private fun addGeofence(geofenceId: String, name: String, radius: Float, coordinates: String) {
         val lat = coordinates.split(",")[0].trim().toDouble()
         val lng = coordinates.split(",")[1].trim().toDouble()
-        val latLng = LatLng(52.230263, 21.010747)
+        val latLng = LatLng(lat, lng)
 
         var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context!!)
 

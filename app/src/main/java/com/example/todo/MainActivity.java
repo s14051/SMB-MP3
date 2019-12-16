@@ -15,19 +15,26 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.SettingInjectorService;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.todo.ui.shopsList.ShopsListPermissionsChecker;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int LOCALIZATION_SETTING_REQUEST = 1;
+    public static final int LOCALIZATION_SETTING_REQUEST = 1;
+    public static final int FRAGMENT_LOCALIZATION_SETTING_REQUEST = 2;
     private FirebaseAuth fa;
 
     @Override
@@ -156,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void requireGps() {
+    public void requireGps() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivityForResult(intent, LOCALIZATION_SETTING_REQUEST);
     }
@@ -183,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 // Permissions granted
                 runShopsListActivity();
             } else {
-                Boolean shouldShowRationale = false;
+                boolean shouldShowRationale = false;
 
                 // Permissions deny - show rationale
                 for (String permission: permissions) {
@@ -241,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 break;
-
         }
     }
 }
